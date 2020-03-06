@@ -3,7 +3,7 @@
 #Description : To download images from nasa website
 
 
-	function guide() {
+function guide() {
 		echo "*************************Script Usage*************************************"
 		echo "Example of the commands for each of the inputs are,"
 		echo "To Download Single Image; i.e. ./nasa.sh -d 2020-03-06"
@@ -116,26 +116,26 @@ function download_imageRange() {
 case $1 in
     "-d")
         guide
-		echo -e "Connecting to nasa.gov..."
+	echo -e "Connecting to nasa.gov..."
         download_image $2
         echo -e "\nFinished.";;
     "--type")
         guide
-		echo -e "Connecting to nasa.gov..."
+	echo -e "Connecting to nasa.gov..."
         view_explanation $4
         echo -e "\nFinished.";;
     "-t")
         guide
-		echo -e "Connecting to nasa.gov..."
+	echo -e "Connecting to nasa.gov..."
         view_detail $4
         echo -e "\nFinished.";;
     "--range")
         guide
-		echo -e "Connecting to nasa.gov..."
+	echo -e "Connecting to nasa.gov..."
         download_imageRange $2 $3
         echo -e "\nFinished.";;
     *)
-		guide
+	guide
         echo -e "\nInvalid input detected. Please follow the instructions.";;
 esac
 exit 0
