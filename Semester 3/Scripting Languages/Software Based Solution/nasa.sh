@@ -122,12 +122,12 @@ case $1 in
     "--type")
         guide
 	echo -e "Connecting to nasa.gov..."
-        view_explanation $4
+        view_explanation $2
         echo -e "\nFinished.";;
     "-t")
         guide
 	echo -e "Connecting to nasa.gov..."
-        view_detail $4
+        view_detail $2
         echo -e "\nFinished.";;
     "--range")
         guide
