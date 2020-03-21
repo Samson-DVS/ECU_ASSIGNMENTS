@@ -4,17 +4,17 @@ This Repo consists my Year 2, and Year 3 assignments for Edith Cowan Cowan Unive
 Modules as follows,
 
 SEMESTER 1
-CSI2102 Information Security
-CSI2104 Introduction to Information Warfare
+CSI2102 Information Security,
+CSI2104 Introduction to Information Warfare,
 
 SEMESTER 2
-CSG2305 Computer Forensics
-CSG2344 Project Methods and Professionalism
-CSI2107 Software Reverse Engineering
-CSI3207 Network Security Fundamentals
+CSG2305 Computer Forensics,
+CSG2344 Project Methods and Professionalism,
+CSI2107 Software Reverse Engineering,
+CSI3207 Network Security Fundamentals,
 
 SEMESTER 3
-CSG3308 Wireless Security
-CSG3309 IT Security Management
-CSI2108 Cryptographic Concepts
-CSP2101 Scripting Languages
+CSG3308 Wireless Security,
+CSG3309 IT Security Management,
+CSI2108 Cryptographic Concepts,
+CSP2101 Scripting Languages,
