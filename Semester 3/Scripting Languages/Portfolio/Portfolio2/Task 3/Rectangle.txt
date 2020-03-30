@@ -1,0 +1,7 @@
+Rec1,70,10,100,Black
+Rec2,60,20,200,Red
+Rec3,50,30,300,Pink
+Rec4,40,40,400,Blue
+Rec5,30,50,500,Pink
+Rec6,20,60,600,Red
+Rec7,10,70,700,Black
