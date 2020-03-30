@@ -1,0 +1,7 @@
+Rec1,10,20,200,Black
+Rec2 4,2,8,Red
+Rec3 60,60,3600,Blue
+Rec4, 8, 12, 96, Red
+Rec5, 10, 15, 150, Blue
+Rec6, 12, 18, 216, Red
+Rec7, 14, 21, 294, Black
