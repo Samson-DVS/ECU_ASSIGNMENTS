@@ -37,18 +37,40 @@ singleImageFile()
 	echo -e "The image file does not exist please check the name you entered"
 	fi
 }
-range()
+
+getimagerange()
 {
-    read -p "Please enter last 4 digitis of the file start range: " begin
-    read -p "Please enter last 4 digitis of the file end range: " end
-    if [[ $begin < $end ]]; then
-    wget https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$begin.jpg -P $file_path
-    let begin+=1
-	let end+=1
-   	echo -e "----------------PROGRAM FINISHED-----------------"
-	else
-	echo -e "The start range should be less than the end range"
-	fi
+    #start loop to check for errors
+    while :; do
+       
+        read -p "Which image do you want to start download from? " begin
+        read -p "Which image do you want to end download at? " end
+        if (( $begin < 1533 || $begin > 2042 )); then
+        echo "Enter a number between 1533 and 2042!!"
+        elif (( $end < 1533 || $end > 2042 )); then
+        echo "Enter a number between 1533 and 2042!!"
+        elif [ $begin -gt $end ]; then
+        echo "Minimum range must be greater then Maximumrange!"
+        echo "Try Again!"
+        else
+        break
+        fi
+    done
+    for i in $(seq $begin $end)
+    do 
+        local name=$i
+        if ! wget -q https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$i.jpg; then
+        echo "Trying to download DSCO$name..."
+        echo "Error 404: File Not Found"
+        else
+        filesize=$(stat -c %s DSC0$name.jpg); 
+        filesizekb=$(awk -v filesizekb=$filesize 'BEGIN { printf "%.2f\n", filesizekb / 1000 }')
+        echo "Downloading DSC0$name, with the file name DSC0$name.jpg, with a file size of $filesizekb kb..." 
+        echo -e "Download Complete\n"
+        #move downloaded images into image dir
+        fi
+
+    done
 }
 maxi=75
 
@@ -75,7 +97,7 @@ case $choice in
     1)
         singleImageFile ;;
     2)
-        range ;;
+        getimagerange ;;
     3)
         randquantity ;;
     4)
