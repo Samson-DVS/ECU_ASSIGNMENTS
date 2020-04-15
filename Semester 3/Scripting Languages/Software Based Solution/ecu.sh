@@ -1,141 +1,85 @@
 #!/bin/bash
-#Author: Samson
-#Description : To download images from nasa website
+function author () {
+echo -e "Student name : Visahl Samson David Selvam"
+echo -e "Student id   : 10498743"
+}
 
 
-function guide() {
-		echo "*************************Script Usage*************************************"
-		echo "Example of the commands for each of the inputs are,"
-		echo "To Download Single Image; i.e. ./nasa.sh -d 2020-03-06"
-		echo "To see explanation; i.e. ./nasa.sh --type 2020-03-06" 
-		echo "To see details; i.e. ./nasa.sh -t 2020-03-06"
-		echo "To download multiple images; i.e. ./nasa.sh --range 2020-03-02 2020-03-06"
-		echo "**************************************************************************"
-    }
+file_path="Samson"
 
-function content_storage() {
-    local formatDate=$(date -d $@ +%y%m%d)
-    local url="https://apod.nasa.gov/apod/ap"$(echo "$formatDate")".html"
-    local content=$(curl -s $url)
-    if [[ $? -eq 0 ]]; then
-        echo "$content"
-    else
-        echo "Content not found"
-    fi
+
+function manual () {
+#Explains the functionality of the program
+echo -e "-----------Please follow the instructions about the program----------------------"
+
+echo -e "->->-> To download specific thumbnail please enter 1  ->->->"                            
+echo -e "->->-> To download range of thumbnails please enter 2 ->->->"
+echo -e "->->-> To download random thumbnails please enter 3   ->->->"
+echo -e "->->-> To download all  thumbnails please enter 4     ->->->"
+
+echo -e "-------------------------------------------------------------------------------"
+
+read -p "Enter your choice: " choice 
 }
-function get_image_name_and_title() {
-    local imageName=$(echo $@ | grep -o "<b>.*</b> <br>" | sed 's/<[^>]*>//g')
-    echo $imageName
+author
+manual
+
+[[ -e ecuimagesimages.txt ]] || [[ -s ecuimages.txt ]] || curl https://www.ecu.edu.au/service-centres/MACSC/gallery/gallery.php?folder=152 | grep -o -e 'http[^"]*\.jpg' > ecuimages.txt | sort -u ecuimages.txt
+
+singleImageFile()
+{
+    read -p "Please enter last 4 digitis of the file : DSC0 " digit
+	if grep  "DSC0$digit" ecuimages.txt
+	then
+    wget - https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$digit.jpg -P $file_path
+	echo -e "$----------------PROGRAM FINISHED-----------------"
+	else
+	echo -e "The image file does not exist please check the name you entered"
+	fi
 }
-function get_explanation() {
-    local explain=$(echo $@ | grep -o "<b> Explanation.*<p>.*<center>" | sed 's/<[^>]*>//g')
-    echo $explain
+range()
+{
+    read -p "Please enter last 4 digitis of the file start range: " begin
+    read -p "Please enter last 4 digitis of the file end range: " end
+    if [[ $begin < $end ]]; then
+    wget https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$begin.jpg -P $file_path
+    let begin+=1
+	let end+=1
+   	echo -e "----------------PROGRAM FINISHED-----------------"
+	else
+	echo -e "The start range should be less than the end range"
+	fi
 }
-function get_image_credit() {
-    local credit=$(echo $@ | grep -o "Image Credit.*</center> <p>" | sed 's/<[^>]*>//g')
-    echo $credit
+maxi=75
+
+randquantity()
+{
+    
+	read -p "Number of image to Download: " quantity
+	if [ $quantity -gt $maxi ]; then
+            echo "Maximum number of images is $maxi"
+	elif [[ $quantity =~ ^[0-9]+$ ]]; then
+	shuf -n $quantity ecuimages.txt > selected.txt
+    wget -i selected.txt -P $file_path
+	echo -e "----------------PROGRAM FINISHED-----------------"
+	else
+			echo -e "Input is invalid character. Please enter a positive integer only!"
+	fi 
 }
-function get_image_link() {
-    local extension=$(echo $@ | grep -o 'image/.*<I' | sed 's/<I/>/g' | tr -d '>"')
-    local addExtension="https://apod.nasa.gov/apod/"$extension
-    if [ -z $extension ]; then
-        echo "Image Not Found"
-    else
-        echo $addExtension
-    fi
+allImageFile()
+{
+    wget -i ecuimages.txt -P $file_path
 }
-function download_image() {
-    htmlContent=$(content_storage $@)
-    if [[ $htmlContent = "notFound" ]]; then
-        echo -e "\nCannot connect to nasa.gov. site"
-        exit 1
-    else
-        imageLink=$(get_image_link $htmlContent)
-        if [[ $imageLink = "noImageFound" ]]; then
-            echo -e "\nNo image was found for this date."
-            exit 1
-        else
-            imageName=$(get_image_name_and_title $htmlContent)
-            imageType=$(get_image_link $htmlContent | sed 's/.*\.//')
-            echo -e "\nDownloading "\"${imageName}"."${imageType}\"
-            wget -q $imageLink
-        fi
-    fi
-}
-function view_explanation() {
-    htmlContent=$(content_storage $@)
-    if [[ $htmlContent = "notFound" ]]; then
-        echo -e "\nUnable to connect to nasa.gov."
-        exit 1
-    else
-        explain=$(get_explanation $htmlContent | sed 's/\<Explanation\>://g')
-        if [[ -z $explain ]]; then
-            echo -e "\nNo image available for the specified date.."
-            exit 1
-        else
-            echo -e "\n$Explanation"
-        fi
-    fi
-}
-function view_detail() {
-    htmlContent=$(content_storage $@)
-    if [[ $htmlContent = "notFound" ]]; then
-        echo -e "\nUnable to connect to nasa.gov."
-        exit 1
-    else
-        title=$(get_image_name_and_title $htmlContent)
-        echo -e "\nTITLE: $title"
-        explain=$(get_explanation $htmlContent | sed 's/Explanation/EXPLANATION/')
-        echo -e "\n$explain"
-        credit=$(get_image_credit $htmlContent | sed 's/Image Credit/IMAGE CREDIT/')
-        if [[ -z $credit ]]; then
-            echo -e "\nNo image available today. Please try again later.."
-            exit 1
-        else
-            echo -e "\n$credit"
-        fi
-    fi
-}
-function download_imageRange() {
-    i=1
-    startDate=$(date -d $1 +%y%m%d)
-    endDate=$(date -d $2 +%y%m%d)
-    between=$(($endDate-$startDate))
-    if [[ $between -le 10 ]]; then
-        rangeDate=$startDate
-        while [ "$rangeDate" -le "$endDate" ]; do
-            callDownloadImg=$(download_image "$rangeDate")
-            echo "$callDownloadImg"
-            rangeDate=$(date +%y%m%d -d "$rangeDate + i day")
-            i=i++;
-        done
-    else 
-        echo -e "\nMaximum number of images to download is 10. Please try again."
-    fi
-}
-case $1 in
-    "-d")
-        guide
-	echo -e "Connecting to nasa.gov..."
-        download_image $2
-        echo -e "\nFinished.";;
-    "--type")
-        guide
-	echo -e "Connecting to nasa.gov..."
-        view_explanation $2
-        echo -e "\nFinished.";;
-    "-t")
-        guide
-	echo -e "Connecting to nasa.gov..."
-        view_detail $2
-        echo -e "\nFinished.";;
-    "--range")
-        guide
-	echo -e "Connecting to nasa.gov..."
-        download_imageRange $2 $3
-        echo -e "\nFinished.";;
+
+case $choice in
+    1)
+        singleImageFile ;;
+    2)
+        range ;;
+    3)
+        randquantity ;;
+    4)
+        allImageFile ;;
     *)
-	guide
-        echo -e "\nInvalid input detected. Please follow the instructions.";;
+        echo "Invalid" ;;
 esac
-exit 0
