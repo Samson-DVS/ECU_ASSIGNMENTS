@@ -12,10 +12,10 @@ function manual () {
 #Explains the functionality of the program
 echo -e "-----------Please follow the instructions about the program----------------------"
 
-echo -e "->->-> To download specific thumbnail please enter 1  ->->->"                            
-echo -e "->->-> To download range of thumbnails please enter 2 ->->->"
-echo -e "->->-> To download random thumbnails please enter 3   ->->->"
-echo -e "->->-> To download all  thumbnails please enter 4     ->->->"
+echo -e "->->-> To download specific thumbnail please enter 1  <-<-<-"                            
+echo -e "->->-> To download range of thumbnails please enter 2 <-<-<-"
+echo -e "->->-> To download random thumbnails please enter 3   <-<-<-"
+echo -e "->->-> To download all  thumbnails please enter 4     <-<-<-"
 
 echo -e "-------------------------------------------------------------------------------"
 
@@ -29,10 +29,13 @@ manual
 singleImageFile()
 {
     read -p "Please enter last 4 digitis of the file : DSC0 " digit
-	if grep  "DSC0$digit" ecuimages.txt
+
+
+
+  if grep  "DSC0$digit" ecuimages.txt
 	then
-    wget - https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$digit.jpg -P $file_path
-	echo -e "$----------------PROGRAM FINISHED-----------------"
+        wget - https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$digit.jpg -P $file_path
+       	echo -e "----------------PROGRAM FINISHED-----------------"
 	else
 	echo -e "The image file does not exist please check the name you entered"
 	fi
@@ -40,18 +43,17 @@ singleImageFile()
 
 getimagerange()
 {
-    #start loop to check for errors
     while :; do
        
-        read -p "Which image do you want to start download from? " begin
-        read -p "Which image do you want to end download at? " end
+        read -p "Enter the start range: " begin
+        read -p "Enter the end range " end
         if (( $begin < 1533 || $begin > 2042 )); then
-        echo "Enter a number between 1533 and 2042!!"
+        echo "The number should be between 1533 and 2042"
         elif (( $end < 1533 || $end > 2042 )); then
-        echo "Enter a number between 1533 and 2042!!"
+        echo "The number should be between 1533 and 2042"
         elif [ $begin -gt $end ]; then
-        echo "Minimum range must be greater then Maximumrange!"
-        echo "Try Again!"
+        echo "Start range must be greater then End!"
+        echo "Please try again!"
         else
         break
         fi
@@ -60,14 +62,13 @@ getimagerange()
     do 
         local name=$i
         if ! wget -q https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$i.jpg; then
-        echo "Trying to download DSCO$name..."
-        echo "Error 404: File Not Found"
+        echo "Attempting to download DSCO$name..."
+        echo "Eror: File Not Found"
         else
-        filesize=$(stat -c %s DSC0$name.jpg); 
-        filesizekb=$(awk -v filesizekb=$filesize 'BEGIN { printf "%.2f\n", filesizekb / 1000 }')
-        echo "Downloading DSC0$name, with the file name DSC0$name.jpg, with a file size of $filesizekb kb..." 
-        echo -e "Download Complete\n"
-        #move downloaded images into image dir
+        size_of_file=$(stat -c %s DSC0$name.jpg); 
+        size_of_filekb=$(awk -v size_of_filekb=$size_of_file 'BEGIN { printf "%.2f\n", size_of_filekb / 1000 }')
+        echo "Downloading DSC0$name, with the file name DSC0$name.jpg, with a file size of $size_of_filekb kb..." 
+        echo -e "----------------PROGRAM FINISHED-----------------"
         fi
 
     done
@@ -88,6 +89,8 @@ randquantity()
 			echo -e "Input is invalid character. Please enter a positive integer only!"
 	fi 
 }
+
+
 allImageFile()
 {
     wget -i ecuimages.txt -P $file_path
