@@ -15,7 +15,13 @@ file_path="Samson"
 #this will ask the user for the root password
 #if curl isn't installed then it will install
 #if already installed it will continue
-sudo apt install curl
+FILE=/usr/bin/curl
+if [[ -f "$FILE" ]]; then
+    echo "curl is available"
+else
+	sudo apt install curl
+fi
+
 
 #move the images to directory samson
 move () {
@@ -58,7 +64,7 @@ singleImageFile()
        #collecting input from user. 
 	   #the user has to enter only last 4 digits of the file
 	   read -p "Please enter last 4 digitis of the file : DSC0 " digit
-        #if the number only between 1533 and 2042 then the program continues
+              #if the number only between 1533 and 2042 then the program continues
         if (( $digit >= 1533 && $digit <= 2042 )); then
         break
         else 
@@ -130,6 +136,8 @@ main ()
 	while [ $times != "$quantity" ]; do
     #shuffling the imagenumbers.txt file to pick random images
 	local name=$(cat ./imagenumbers.txt | shuf -n 1)
+   
+
 	 wget -q https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/$name.jpg 
  #caluting the file size
 	size_of_file=$(stat -c %s "$name".jpg); 
@@ -151,8 +159,11 @@ main ()
             echo "Maximum number of images is $limit"
 	elif [[ ! $quantity =~ ^[0-9]+$ ]]; then
 	echo -e "invalid character detected please enter only numeric value"
+	 elif 
+              [[ -f "$quantity" ]]; then
+          echo "$quantity already exist"
 	else
-	main
+  	main
 	fi
 	
     
@@ -163,7 +174,7 @@ allImageFile ()
     echo "Downloading all images..."
 	#goign through all the linex of ecuimages.text file
     while read -r line; do
-        wget -q $line 
+     wget -q $line 
 	#readint the 60th character of each line 
 	#upto 8 character. Since, that would be the image names
 	    local name=${line:60:8}
