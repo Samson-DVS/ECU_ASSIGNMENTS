@@ -3,7 +3,7 @@
 function author () {
 echo -e "---------------------Student Details---------------------"
 echo -e "|      Student name : Visahl Samson David Selvam        |"
-echo -e "|      Student Id   : 10498743       				               |"
+echo -e "|      Student Id   : 10498743       				     |"
 echo -e "---------------------------------------------------------"
 }
 
@@ -26,7 +26,7 @@ function manual () {
 #Explains the functionality of the program
 echo -e "-----------Instructions about the program----------"
 
-echo -e "| To download single thumbnail please enter    1  |"                            
+echo -e "| To download single thumbnail please enter  1    |"                            
 echo -e "| To download range of thumbnails please enter 2  |"
 echo -e "| To download random thumbnails please enter   3  |"
 echo -e "| To download all  thumbnails please enter     4  |"
@@ -65,9 +65,9 @@ singleImageFile()
         echo "The number shoud be  between 1533 and 2042"
         fi
     done
-	#downloading image and savind them in the desi{Red} path
+	#downloading image and savind them in the desination path
     if ! wget -q https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC0$digit.jpg; then
-         echo "File Not Found please check the name ente{Red}"
+         echo "File Not Found please check the name enter"
     else
 	#caluting the file size
     size_of_file=$(stat -c %s DSC0$digit.jpg); 
