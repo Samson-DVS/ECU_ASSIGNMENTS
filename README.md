@@ -18,3 +18,7 @@ CSG3308 Wireless Security,
 CSG3309 IT Security Management,
 CSI2108 Cryptographic Concepts,
 CSP2101 Scripting Languages,
+
+SEMESTER 4
+CSG2341 Intelligent Systems,
+CSG2132 Enterprise Data,
