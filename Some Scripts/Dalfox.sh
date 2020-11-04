@@ -1,4 +1,5 @@
 cd
+sudo apt-get update
 sudo apt-get install golang
 go get -u github.com/tomnomnom/gf
 go get github.com/tomnomnom/waybackurls
