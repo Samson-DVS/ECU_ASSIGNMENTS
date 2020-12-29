@@ -23,7 +23,7 @@ SEMESTER 4:
 CSG2341 Intelligent Systems,
 CSG2132 Enterprise Data,
 
-Semester 5:
+SEMESTER 5:
 MAT3170 Data Analysis and Visualisation,
 CSG3101 Applied Project,
 CSI3208 Ethical Hacking and Defence,
