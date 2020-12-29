@@ -3,7 +3,7 @@
 This Repo consists my Year 2, and Year 3 assignments for Edith Cowan Cowan University BSc Cyber Security (Y89) degree
 Modules as follows,
 
-SEMESTER 1L
+SEMESTER 1:
 CSI2102 Information Security,
 CSI2104 Introduction to Information Warfare,
 
